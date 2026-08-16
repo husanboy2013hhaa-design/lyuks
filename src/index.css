@@ -1,0 +1,424 @@
+/* Telegram theme variables with sensible fallbacks for browser testing */
+:root {
+  --bg: var(--tg-theme-bg-color, #ffffff);
+  --text: var(--tg-theme-text-color, #1c1c1e);
+  --hint: var(--tg-theme-hint-color, #8e8e93);
+  --accent: var(--tg-theme-button-color, #2ea6ff);
+  --accent-text: var(--tg-theme-button-text-color, #ffffff);
+  --card: var(--tg-theme-secondary-bg-color, #f2f2f7);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 12px 12px 90px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0 12px;
+}
+
+.header h1 {
+  font-size: 20px;
+}
+
+.btn-back {
+  border: none;
+  background: var(--card);
+  color: var(--text);
+  font-size: 18px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* Search */
+.search {
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--text);
+  font-size: 15px;
+  outline: none;
+  margin-bottom: 12px;
+}
+
+.search::placeholder {
+  color: var(--hint);
+}
+
+/* Category bar */
+.category-bar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  scrollbar-width: none;
+}
+
+.category-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.category-chip {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 20px;
+  background: var(--card);
+  color: var(--text);
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.category-chip.active {
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
+.category-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  /* pull back into the chip's left padding, which was sized for an emoji */
+  margin-left: -4px;
+}
+
+/* Product grid */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.product-card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+}
+
+.product-image {
+  width: 100%;
+  height: 88px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* contain, not cover: product packshots are often tall (bottles, packets)
+   and cropping them to the short tile would cut the product in half. */
+.product-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.product-name {
+  font-size: 14px;
+  font-weight: 500;
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+}
+
+.product-price {
+  font-size: 13px;
+  color: var(--hint);
+}
+
+/* Buttons */
+.btn-add {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--accent-text);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-add.disabled {
+  background: var(--card);
+  color: var(--hint);
+  border: 1px solid var(--hint);
+  cursor: not-allowed;
+}
+
+.product-card.sold-out {
+  opacity: 0.55;
+}
+
+/* Tappable area (photo + name) that opens the detail page */
+.product-tap {
+  cursor: pointer;
+  /* full card width so the photo above the name is edge-to-edge */
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ---- Product detail page ---- */
+.detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding-top: 8px;
+}
+
+.product-image.big {
+  width: 100%;
+  max-width: 300px;
+  /* height comes from aspect-ratio here, not the 88px grid tile */
+  height: auto;
+  aspect-ratio: 1 / 1;
+  background: var(--card);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* The detail tile is square like the photos, so filling it is safe here. */
+.product-image.big .product-photo {
+  object-fit: cover;
+}
+
+.detail-name {
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.detail-price {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.detail-stock {
+  font-size: 14px;
+  color: var(--hint);
+}
+
+.detail-stock.out {
+  color: #e53935;
+}
+
+.detail-qty {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.btn-qty.big {
+  width: 44px;
+  height: 44px;
+  font-size: 22px;
+}
+
+.btn-primary.disabled,
+.btn-primary:disabled {
+  background: var(--card);
+  color: var(--hint);
+  cursor: not-allowed;
+}
+
+.form-error {
+  font-size: 13px;
+  color: #e05252;
+  text-align: center;
+}
+
+/* "+" once the basket holds all the stock there is */
+.btn-qty:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--text);
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.qty-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.qty-controls.small {
+  gap: 8px;
+}
+
+.btn-qty {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--accent-text);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.qty-value {
+  font-size: 16px;
+  font-weight: 600;
+  min-width: 20px;
+  text-align: center;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: var(--accent);
+  color: var(--accent-text);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary.sticky {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 24px);
+  max-width: 456px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Cart */
+.cart {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cart-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card);
+  border-radius: 14px;
+  padding: 10px 12px;
+}
+
+.cart-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.cart-info {
+  flex: 1;
+}
+
+.cart-name {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.cart-price {
+  font-size: 12px;
+  color: var(--hint);
+}
+
+.cart-total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 17px;
+  padding: 14px 4px;
+  border-top: 1px solid var(--card);
+  margin-top: 6px;
+}
+
+/* Checkout */
+.checkout {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.checkout label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.checkout input,
+.checkout textarea {
+  padding: 10px 12px;
+  border: none;
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--text);
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+  resize: none;
+}
+
+.checkout input::placeholder,
+.checkout textarea::placeholder {
+  color: var(--hint);
+}
+
+.empty-note {
+  text-align: center;
+  color: var(--hint);
+  padding: 48px 0;
+  font-size: 16px;
+}
