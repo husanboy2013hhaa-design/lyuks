@@ -1,2 +1,9 @@
 .vercel
 .env*.local
+.env
+
+node_modules
+
+# The bot is a separate project — it lives in "lyuks bot 2/bot".
+# A second copy here is how a hardcoded token ended up in this repo.
+bot/

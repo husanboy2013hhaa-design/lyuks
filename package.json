@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "gen-images": "node scripts/gen-images.mjs",
-    "dev": "node scripts/gen-images.mjs && vite",
-    "build": "node scripts/gen-images.mjs && vite build",
+    "gen-products": "node scripts/gen-products-json.mjs",
+    "dev": "node scripts/gen-images.mjs && node scripts/gen-products-json.mjs && vite",
+    "build": "node scripts/gen-images.mjs && node scripts/gen-products-json.mjs && vite build",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -5,7 +5,9 @@ import { formatPrice } from "../data/products";
 // The bot's /order endpoint, e.g. https://lyuks-bot.onrender.com
 // Set VITE_ORDER_API in .env.local (and in Vercel's env vars).
 // Unset -> the old alert-only behaviour, so local testing still works.
-const ORDER_API = import.meta.env.VITE_ORDER_API;
+// Trailing slashes are trimmed: "http://host:10000/" would otherwise build
+// "http://host:10000//order", which Flask answers with a 404.
+const ORDER_API = (import.meta.env.VITE_ORDER_API || "").replace(/\/+$/, "");
 
 export default function Checkout() {
   const { items, total, clear } = useCart();

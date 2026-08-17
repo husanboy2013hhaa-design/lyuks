@@ -9,6 +9,16 @@ const STORAGE_KEY = "lyuks-cart";
 // on every tap.
 const byId = new Map(products.map((p) => [p.id, p]));
 
+// How many of a product may sit in the basket.
+// Stock is weighed for some products, so it arrives fractional (0.506 kg,
+// 146.466 kg). Flooring alone would make anything under 1 unorderable —
+// its "Qo'shish" button would look fine and do nothing — so anything we
+// have *some* of can always be ordered at least once.
+function maxQty(product) {
+  if (!product || product.stock <= 0) return 0;
+  return Math.max(1, Math.floor(product.stock));
+}
+
 // A cart saved by an older visit may name products that no longer exist,
 // or hold more than we now have in stock — clamp it on the way in.
 function loadCart() {
@@ -16,9 +26,8 @@ function loadCart() {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
     const clean = {};
     for (const [id, qty] of Object.entries(saved)) {
-      const product = byId.get(Number(id));
-      if (!product || product.stock <= 0) continue;
-      const n = Math.min(Math.floor(Number(qty)) || 0, product.stock);
+      const max = maxQty(byId.get(Number(id)));
+      const n = Math.min(Math.floor(Number(qty)) || 0, max);
       if (n > 0) clean[id] = n;
     }
     return clean;
@@ -42,10 +51,9 @@ export function CartProvider({ children }) {
 
   const add = (id) =>
     setQuantities((q) => {
-      const stock = byId.get(id)?.stock ?? 0;
       const next = (q[id] || 0) + 1;
       // Never let the basket exceed what we actually have.
-      if (next > stock) return q;
+      if (next > maxQty(byId.get(id))) return q;
       return { ...q, [id]: next };
     });
 
@@ -73,7 +81,7 @@ export function CartProvider({ children }) {
 
   // True when the basket already holds everything we have of this product,
   // so the "+" button can show as disabled instead of silently doing nothing.
-  const atStockLimit = (id) => (quantities[id] || 0) >= (byId.get(id)?.stock ?? 0);
+  const atStockLimit = (id) => (quantities[id] || 0) >= maxQty(byId.get(id));
 
   const value = {
     quantities,
